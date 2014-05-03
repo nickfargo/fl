@@ -6,7 +6,7 @@ Functional lazy operators and sequences.
 * Accepts ES6 generators as lazy sequences
 * Designed to collaborate with modules such as **[pim.js][]**, which provides persistent immutable data structures
 
-> TODO: Compare to mori.js, lazy.js … underscore|lodash with api adapter
+> TODO: Compare to mori.js, lazy.js, (underscore | lodash) with api adapter
 
 
 
@@ -18,4 +18,4 @@ Functional lazy operators and sequences.
 
 
 [Iterator]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol
-[pim.js]: http://npmjs.org/packages/pim
+[pim.js]: http://npmjs.org/package/pim
