@@ -52,7 +52,7 @@
         @generator.apply this, arguments
 
       call: ( context ) ->
-        @generator.call context, slice.call arguments, 1
+        @generator.apply context, slice.call arguments, 1
 
       apply: ( context, args ) ->
         @generator.apply context, args
