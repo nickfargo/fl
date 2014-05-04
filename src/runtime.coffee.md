@@ -18,12 +18,17 @@ functions together with a set of derived operations expressed functionally.
     assertUnfinished = ( iteratorOutput ) ->
       do throwIteratorFinished if iteratorOutput.done
 
-    generatorOf = ( iterable ) -> if not iterable? then empty else ->
-      iterable?() or
-      iterable.__iterator__?() or
-      ( iterable if typeof iterable.next is 'function' ) or
-      ( new ArrayIterator iterable if iterable.length? ) or
-      empty()
+    generatorOf = ( iterable ) ->
+      return empty unless iterable?
+      if typeof iterable is 'function'
+        -> iterable()
+      else if typeof iterable.__iterator__ is 'function'
+        -> iterable.__iterator__()
+      else if typeof iterable.next is 'function'
+        -> iterable
+      else if iterable.length? and typeof iterable.splice is 'function'
+        -> new ArrayIterator iterable
+      else empty
 
     callable = ( object ) ->
       if typeof object.call is 'function'
