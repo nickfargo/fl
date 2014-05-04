@@ -22,7 +22,8 @@ functions together with a set of derived operations expressed functionally.
       iterable?() or
       iterable.__iterator__?() or
       ( iterable if typeof iterable.next is 'function' ) or
-      new ArrayIterator iterable
+      ( new ArrayIterator iterable if iterable.length? ) or
+      empty()
 
     callable = ( object ) ->
       if typeof object.call is 'function'
