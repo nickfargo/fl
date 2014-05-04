@@ -5,6 +5,7 @@
       map
       sum
       increment
+      rest
       repeat
       cycle
       iterate
@@ -22,6 +23,11 @@
 
 
     describe "a few basics:", ->
+
+      it "does `rest`", ->
+        array = toArray rest [0,1,2,3]
+        expect array.join ' '
+          .to.equal '1 2 3'
 
       it "does `range`, `interleave`, `toArray`", ->
         array = toArray interleave [0,1,2], range(3,9), [9,10,11,12]

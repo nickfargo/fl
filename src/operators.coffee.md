@@ -12,6 +12,7 @@
       nullGenerator
       generatorOf
       callable
+      rest
       repeat
       cycle
       iterate
@@ -124,6 +125,7 @@ sequence, ... -> sequence
 ..., sequence -> sequence
 
       {
+        rest
         interpose
         filter
         remove
