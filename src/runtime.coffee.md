@@ -344,9 +344,9 @@ functions together with a set of derived operations expressed functionally.
 #### concat
 
     concat = ->
+      return empty unless arguments.length
       sequences = slice.call arguments
-      if sequences.length then -> new ConcatIterator sequences
-      else empty
+      -> new ConcatIterator sequences
 
     class ConcatIterator
       constructor: ( @sequences ) ->
