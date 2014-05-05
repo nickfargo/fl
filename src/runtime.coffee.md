@@ -60,13 +60,13 @@ functions together with a set of derived operations expressed functionally.
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
 
-    __part_send__ = ( out, value, done ) ->
+    __send_to_output__ = ( out, value, done ) ->
       out.value = value
       out.done = done
       out
 
-    __part_sendArraySequence__ = ( out, array ) ->
-      __part_send__ out, ( new ArrayIterator array.slice() if array? ), no
+    __send_part_to_output__ = ( out, array ) ->
+      __send_to_output__ out, ( new ArrayIterator array.slice() if array? ), no
 
 
 
@@ -413,15 +413,15 @@ functions together with a set of derived operations expressed functionally.
       next: ->
         { size, source, gap, out } = this
         assertUnfinished out
-        return __part_send__ out, undefined, yes unless @source?
+        return __send_to_output__ out, undefined, yes unless @source?
 
         i = 0; part = gap < 0 and @part or []; while part.length < size
           { value, done } = source.next()
           if done
             @source = null
-            return __part_send__ out, undefined, yes unless i
+            return __send_to_output__ out, undefined, yes unless i
             pad part, @padding, size - part.length if part.length
-            return __part_sendArraySequence__ out, part
+            return __send_part_to_output__ out, part
           i = part.push value
 
         if gap < 0
@@ -430,7 +430,7 @@ functions together with a set of derived operations expressed functionally.
           i = 0; while i++ < gap
             if source.next().done then @source = null; break
 
-        __part_sendArraySequence__ out, part
+        __send_part_to_output__ out, part
 
 
 #### takeWhile
