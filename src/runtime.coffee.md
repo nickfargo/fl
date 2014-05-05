@@ -126,13 +126,6 @@ functions together with a set of derived operations expressed functionally.
         out
 
 
-#### rest
-
-    rest = ( sequence ) ->
-      iterator = ( callable sequence ).call()
-      if iterator.next().done then empty else generatorOf iterator
-
-
 #### repeat
 
     repeat = ( value ) -> -> new RepeatIterator value
@@ -512,7 +505,6 @@ functions together with a set of derived operations expressed functionally.
       empty
       generatorOf
       callable
-      rest
       repeat
       cycle
       iterate

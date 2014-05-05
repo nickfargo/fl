@@ -12,7 +12,6 @@
       nullGenerator
       generatorOf
       callable
-      rest
       repeat
       cycle
       iterate
@@ -37,12 +36,16 @@
       fn.apply this, toArray sequence
 
 
+    rest = ( sequence ) ->
+      drop 1, sequence
+
+
     remove = ( predicate, sequence ) ->
       filter ( complement predicate ), sequence
 
 
     interpose = ( separator, sequence ) ->
-      drop 1, interleave ( repeat separator ), sequence
+      rest interleave ( repeat separator ), sequence
 
 
     take = ( amount, sequence ) ->
