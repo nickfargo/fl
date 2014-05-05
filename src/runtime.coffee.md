@@ -419,8 +419,8 @@ functions together with a set of derived operations expressed functionally.
           { value, done } = source.next()
           if done
             @source = null
-            return __part_send__ out, undefined, yes if i is 0
-            pad part, @padding, size - part.length if part.length > 0
+            return __part_send__ out, undefined, yes unless i
+            pad part, @padding, size - part.length if part.length
             return __part_sendArraySequence__ out, part
           i = part.push value
 
