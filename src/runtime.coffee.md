@@ -264,13 +264,13 @@ functions together with a set of derived operations expressed functionally.
 
     map = ( fn, sequence, rest ) ->
       if not sequence? then empty
-      else if not rest? then _map fn, sequence
-      else _map_variadic fn, slice.call arguments, 1
+      else if not rest? then __map_one__ fn, sequence
+      else __map_variadic__ fn, slice.call arguments, 1
 
-    _map = ( fn, sequence ) -> ->
+    __map_one__ = ( fn, sequence ) -> ->
       new MapIterator fn, iteratorOf sequence
 
-    _map_variadic = ( fn, sequences ) -> ->
+    __map_variadic__ = ( fn, sequences ) -> ->
       new MapIterator_variadic fn, __map_one__ iteratorOf, sequences
 
     class MapIterator_variadic
