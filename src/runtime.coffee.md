@@ -30,6 +30,11 @@ functions together with a set of derived operations expressed functionally.
         -> new ArrayIterator iterable
       else empty
 
+    iteratorOf = ( sequence ) ->
+      iterator = ( callable sequence ).call()
+      throw new Error "Not iterable" unless typeof iterator.next is 'function'
+      iterator
+
     callable = ( object ) ->
       if typeof object.call is 'function'
       then object
@@ -143,15 +148,14 @@ functions together with a set of derived operations expressed functionally.
 
     class CycleIterator
       constructor: ( @sequence ) ->
-        @source = ( callable sequence ).call()
+        @source = iteratorOf sequence
         @out = new IteratorOutput
 
       next: ->
         assertUnfinished out = @out
         { value, done } = @source.next()
         if done
-          @source = ( callable @sequence ).call()
-          { value, done } = @source.next()
+          { value, done } = ( @source = iteratorOf @sequence ).next()
         out.value = value
         out.done = done
         out
@@ -183,10 +187,7 @@ functions together with a set of derived operations expressed functionally.
       else if not rest?
         callable sequence
       else
-        sequences = slice.call arguments
-        i = 0; while i < sequences.length
-          sequences[i] = callable( sequences[i] ).call()
-          i++
+        sequences = toArray map iteratorOf, arguments
         -> new InterleaveIterator sequences
 
     class InterleaveIterator
@@ -240,7 +241,7 @@ functions together with a set of derived operations expressed functionally.
 #### filter
 
     filter = ( predicate, sequence ) -> ->
-      new FilterIterator predicate, ( callable sequence ).call()
+      new FilterIterator predicate, iteratorOf sequence
 
     class FilterIterator
       constructor: ( @predicate, @source ) ->
@@ -263,13 +264,14 @@ functions together with a set of derived operations expressed functionally.
 
     map = ( fn, sequence, rest ) ->
       if not sequence? then empty
-      else if not rest?
-        -> new MapIterator fn, ( callable sequence ).call()
-      else
-        sequences = slice.call arguments, 1
-        i = 0; while i < sequences.length
-          sequences[i] = ( callable sequences[i] ).call()
-        -> new MapIterator_variadic fn, sequences
+      else if not rest? then _map fn, sequence
+      else _map_variadic fn, slice.call arguments, 1
+
+    _map = ( fn, sequence ) -> ->
+      new MapIterator fn, iteratorOf sequence
+
+    _map_variadic = ( fn, sequences ) -> ->
+      new MapIterator_variadic fn, __map_one__ iteratorOf, sequences
 
     class MapIterator_variadic
       constructor: ( @fn, @sources ) ->
@@ -323,7 +325,7 @@ functions together with a set of derived operations expressed functionally.
       unless sequence?
         sequence = seed
         seed = undefined
-      -> new ReductionIterator fn, seed, ( callable sequence ).call()
+      -> new ReductionIterator fn, seed, iteratorOf sequence
 
     class ReductionIterator
       constructor: ( @fn, @seed, @source ) ->
@@ -356,7 +358,7 @@ functions together with a set of derived operations expressed functionally.
 
     class ConcatIterator
       constructor: ( @sequences ) ->
-        @source = ( callable sequences[0] ).call()
+        @source = iteratorOf sequences[0]
         @index = 0
         @out = new IteratorOutput
 
@@ -367,7 +369,7 @@ functions together with a set of derived operations expressed functionally.
           if sequence = @sequences[ ++@index ]
             out.value = value
             out.done = no
-            @source = ( callable sequence ).call()
+            @source = iteratorOf sequence
             return @next()
           else
             value = undefined
@@ -383,8 +385,7 @@ functions together with a set of derived operations expressed functionally.
       when 0, 1 then throw new TypeError
       when 2 then partition size, size, null, stride
       when 3 then partition size, stride, null, padding
-      else -> new PartitionIterator size, stride, padding,
-                ( callable sequence ).call()
+      else -> new PartitionIterator size, stride, padding, iteratorOf sequence
 
     class PartitionIterator
       constructor: ( @size, stride, @padding, @source ) ->
@@ -393,7 +394,7 @@ functions together with a set of derived operations expressed functionally.
         @out = new IteratorOutput
 
       pad = ( part, padding, amount ) ->
-        if padding? and source = ( callable padding ).call()
+        if padding? and source = iteratorOf padding
           i = 0; while i < amount
             { value, done } = source.next()
             break if done
@@ -435,7 +436,7 @@ functions together with a set of derived operations expressed functionally.
 #### takeWhile
 
     takeWhile = ( predicate, sequence ) -> ->
-      new TakeIterator predicate, ( callable sequence ).call()
+      new TakeIterator predicate, iteratorOf sequence
 
     class TakeIterator
       constructor: ( @predicate, @source ) ->
@@ -457,7 +458,7 @@ functions together with a set of derived operations expressed functionally.
 #### dropWhile
 
     dropWhile = ( predicate, sequence ) -> ->
-      new DropIterator predicate, ( callable sequence ).call()
+      new DropIterator predicate, iteratorOf sequence
 
     class DropIterator
       constructor: ( @predicate, @source ) ->
@@ -481,7 +482,7 @@ functions together with a set of derived operations expressed functionally.
 
     toArray = ( sequence, limit = Infinity ) ->
       throw new TypeError unless sequence?
-      iterator = ( callable sequence ).call()
+      iterator = iteratorOf sequence
       out = []
       i = 0; while i++ < limit
         { value, done } = iterator.next()
@@ -504,6 +505,7 @@ functions together with a set of derived operations expressed functionally.
       complement
       empty
       generatorOf
+      iteratorOf
       callable
       repeat
       cycle
