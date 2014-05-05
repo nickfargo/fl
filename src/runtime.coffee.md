@@ -327,7 +327,7 @@ functions together with a set of derived operations expressed functionally.
 
     class ReductionIterator
       constructor: ( @fn, @seed, @source ) ->
-        @out = new IteratorOutput
+        @out = out = new IteratorOutput
         if seed?
           out.value = seed
         else
