@@ -26,7 +26,7 @@ functions together with a set of derived operations expressed functionally.
         -> iterable.__iterator__()
       else if typeof iterable.next is 'function'
         -> iterable
-      else if iterable.length? and typeof iterable.splice is 'function'
+      else if typeof iterable.length is 'number'
         -> new ArrayIterator iterable
       else empty
 
