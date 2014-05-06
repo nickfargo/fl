@@ -6,6 +6,24 @@ Low-level functions and iterators, implemented imperatively for performance.
 This module is imported by the `operators` module, which in turn exports these
 functions together with a set of derived operations expressed functionally.
 
+##### Conventions
+
+An **iterator** is any object that conforms to the [ES6 Iterator protocol][0].
+
+A **sequence**, and likewise values dereferenced from a `sequence` identifier,
+may be either a proper `Sequence` instance, or a function that creates and
+returns an iterator, such as a generator function.
+
+Most of this module’s **sequencing functions** are paired with a corresponding
+**iterator class** (e.g. `range` and `RangeIterator`) that defines a `next`
+method.
+
+In most `next` method definitions there is a `source` identifier, which refers
+to an iterator.
+
+[0]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol
+
+
     { slice } = Array::
 
 
@@ -124,7 +142,9 @@ functions together with a set of derived operations expressed functionally.
 
 
 
-### Iterating functions
+### Sequencing functions
+
+Return sequences as functions that return specifically typed iterators.
 
 
 #### empty
@@ -151,8 +171,6 @@ functions together with a set of derived operations expressed functionally.
 
 
 #### cycle
-
-> TODO: memoize values from first iteration of sequence
 
     cycle = ( sequence ) -> -> new CycleIterator sequence
 
