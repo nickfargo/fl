@@ -67,7 +67,8 @@ functions together with a set of derived operations expressed functionally.
       out
 
     __send_part_to_output__ = ( out, array ) ->
-      __send_to_output__ out, ( new ArrayIterator array.slice() if array? ), no
+      a = array.slice()
+      __send_to_output__ out, ( -> new ArrayIterator a ), no
 
 
 
