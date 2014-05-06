@@ -14,6 +14,7 @@ functions together with a set of derived operations expressed functionally.
 ### Utility functions
 
     throwIteratorFinished = -> throw new Error "Iterator has already finished"
+    throwNotSequential = -> throw new Error "Object is not sequential"
 
     assertUnfinished = ( iteratorOutput ) ->
       do throwIteratorFinished if iteratorOutput.done
@@ -31,8 +32,8 @@ functions together with a set of derived operations expressed functionally.
       else empty
 
     iteratorOf = ( sequence ) ->
-      iterator = ( callable sequence ).call()
-      throw new Error "Not iterable" unless typeof iterator.next is 'function'
+      iterator = ( callable sequence )?.call?()
+      do throwNotSequential unless typeof iterator?.next is 'function'
       iterator
 
     callable = ( object ) ->
