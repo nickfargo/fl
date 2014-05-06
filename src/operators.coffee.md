@@ -23,6 +23,7 @@
       reductions
       concat
       partition
+      partitionBy
       takeWhile
       dropWhile
       toArray
@@ -136,6 +137,7 @@ sequence, ... -> sequence
         reductions
         cycle
         partition
+        partitionBy
         take
         takeWhile
         takeUntil

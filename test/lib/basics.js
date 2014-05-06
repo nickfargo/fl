@@ -27,7 +27,7 @@
       array = Sequence([4]).concat(Sequence.range(1, 4).cycle()).take(20).toArray();
       return expect(array.join(' ')).to.equal('4 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1');
     });
-    return it("does `partition`", function() {
+    it("does `partition`", function() {
       var array;
       array = Sequence.range(40).partition(3, 10).map(function(s) {
         return toArray(s).join(' ');
@@ -41,6 +41,15 @@
         return toArray(s).join(' ');
       }).toArray();
       return expect(array.join(' ')).to.equal('0 1 2 3 4 5 3 4 5 6 7 8 6 7 8 9 97 98');
+    });
+    return it("does `partitionBy`", function() {
+      var array;
+      array = Sequence.range(20).partitionBy(function(n) {
+        return (Math.sqrt(n)) | 0;
+      }).map(function(s) {
+        return toArray(s).join(' ');
+      }).toArray();
+      return expect(array.join(' / ')).to.equal('0 / 1 2 3 / 4 5 6 7 8 / 9 10 11 12 13 14 15 / 16 17 18 19');
     });
   });
 

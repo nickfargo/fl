@@ -435,6 +435,45 @@ functions together with a set of derived operations expressed functionally.
         __send_part_to_output__ out, part
 
 
+#### partitionBy
+
+    partitionBy = ( fn, sequence ) -> ->
+      new PartitionByIterator fn, iteratorOf sequence
+
+    class PartitionByIterator
+      constructor: ( @fn, @source ) ->
+        { value, done } = source.next()
+        return new EmptyIterator if done
+        @backvalue = value
+        @label = fn value
+        @part = []
+        @out = new IteratorOutput
+
+      next: ->
+        { fn, source, part, out } = this
+        assertUnfinished out
+        return __send_to_output__ out, undefined, yes unless source?
+
+        loop
+          { value, done } = source.next()
+          if done
+            @source = null
+            part.push @backvalue
+            __send_part_to_output__ out, part, no
+            break
+
+          part.push @backvalue
+          @backvalue = value
+
+          if @label isnt label = fn value
+            @label = label
+            __send_part_to_output__ out, part, no
+            break
+
+        part.length = 0
+        out
+
+
 #### takeWhile
 
     takeWhile = ( predicate, sequence ) -> ->
@@ -520,6 +559,7 @@ functions together with a set of derived operations expressed functionally.
       reductions
       concat
       partition
+      partitionBy
       takeWhile
       dropWhile
       toArray
@@ -536,6 +576,7 @@ functions together with a set of derived operations expressed functionally.
       ReductionIterator
       ConcatIterator
       PartitionIterator
+      PartitionByIterator
       TakeIterator
       DropIterator
     }
