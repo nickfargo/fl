@@ -432,7 +432,7 @@ Return sequences as functions that return specifically typed iterators.
         part
 
       next: ->
-        { size, source, gap, out } = this
+        { size, padding, source, gap, out } = this
         assertUnfinished out
         return __send_to_output__ out, undefined, yes unless @source?
 
@@ -440,8 +440,10 @@ Return sequences as functions that return specifically typed iterators.
           { value, done } = source.next()
           if done
             @source = null
-            return __send_to_output__ out, undefined, yes unless i
-            pad part, @padding, size - part.length if part.length
+            unless i and padding?
+              return __send_to_output__ out, undefined, yes
+            if part.length
+              pad part, padding, size - part.length
             return __send_part_to_output__ out, part
           i = part.push value
 
