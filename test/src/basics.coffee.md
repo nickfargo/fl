@@ -4,6 +4,9 @@
       Sequence
       map
       sum
+      multiply
+      isEven
+      isOdd
       increment
       rest
       repeat
@@ -83,6 +86,24 @@
           .toArray()
         expect array.join ' / '
           .to.equal '0 / 1 2 3 / 4 5 6 7 8 / 9 10 11 12 13 14 15 / 16 17 18 19'
+
+
+
+    describe "examples from external sources", ->
+
+      # http://aphyr.com/posts/304-clojure-from-the-ground-up-sequences
+      it "chains [ iterate, filter, partition, map, take, reduce ]", ->
+        result = Sequence
+          .iterate increment, 0
+          .filter isOdd
+          .partition 2, 1
+          .map Sequence
+          .map (s) -> s.reduce multiply
+          .take 1000
+          .reduce sum
+        expect result
+          .to.equal 1335333000
+
 
 
 
