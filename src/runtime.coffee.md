@@ -205,6 +205,7 @@ Return sequences as functions that return specifically typed iterators.
         else
           @iterated = yes
         out.done = no
+        out
 
 
 #### interleave
