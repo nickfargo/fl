@@ -108,6 +108,7 @@ value -> sequence
         map
         concat
         cycle
+        interleave
       }
 
 sequence -> value
