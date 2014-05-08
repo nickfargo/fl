@@ -300,7 +300,7 @@ Return sequences as functions that return specifically typed iterators.
       new MapIterator fn, iteratorOf sequence
 
     __map_variadic__ = ( fn, sequences ) -> ->
-      new MapIterator_variadic fn, __map_one__ iteratorOf, sequences
+      new MapIterator_variadic fn, toArray __map_one__ iteratorOf, sequences
 
     class MapIterator_variadic
       constructor: ( @fn, @sources ) ->
