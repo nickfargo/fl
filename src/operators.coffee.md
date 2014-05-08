@@ -126,6 +126,12 @@ sequence, ... -> sequence
         interleave
       }
 
+arg, sequence, ... -> sequence
+
+      {
+        map
+      }
+
 ..., sequence -> sequence
 
       {
@@ -133,7 +139,6 @@ sequence, ... -> sequence
         interpose
         filter
         remove
-        map
         reductions
         cycle
         partition

@@ -20,6 +20,7 @@
         VALUE_TO_SEQUENCE
         SEQUENCE_TO_VALUE
         SEQUENCE_AND_REST_TO_SEQUENCE
+        ARGUMENT_AND_SEQUENCE_AND_REST_TO_SEQUENCE
         REST_AND_SEQUENCE_TO_SEQUENCE
       ] =
         operators.signatures
@@ -62,6 +63,9 @@
 
       for name, fn of SEQUENCE_AND_REST_TO_SEQUENCE
         @::[name] = do ( fn ) -> -> new Sequence fn this, arguments...
+
+      for name, fn of ARGUMENT_AND_SEQUENCE_AND_REST_TO_SEQUENCE
+        @::[name] = do ( fn ) -> ( a, aa... ) -> new Sequence fn a, this, aa...
 
       for name, fn of REST_AND_SEQUENCE_TO_SEQUENCE
         @::[name] = do ( fn ) -> -> new Sequence fn arguments..., this
