@@ -28,14 +28,29 @@ to an iterator.
 
 
 
+### Private functions
+
+    __assert_unfinished__ = ( iteratorOutput ) ->
+      do __throw_iterator_finished__ if iteratorOutput.done
+
+    __send_to_output__ = ( out, value, done ) ->
+      out.value = value
+      out.done = done
+      out
+
+    __send_part_to_output__ = ( out, array ) ->
+      a = array.slice()
+      __send_to_output__ out, ( -> new ArrayIterator a ), no
+
+    __throw_iterator_finished__ = ->
+      throw new Error "Iterator has already finished"
+
+    __throw_not_sequential__ = ->
+      throw new Error "Object is not sequential"
+
+
 
 ### Utility functions
-
-    throwIteratorFinished = -> throw new Error "Iterator has already finished"
-    throwNotSequential = -> throw new Error "Object is not sequential"
-
-    assertUnfinished = ( iteratorOutput ) ->
-      do throwIteratorFinished if iteratorOutput.done
 
     generatorOf = ( iterable ) ->
       return empty unless iterable?
@@ -51,7 +66,7 @@ to an iterator.
 
     iteratorOf = ( sequence ) ->
       iterator = ( callable sequence )?.call?()
-      do throwNotSequential unless typeof iterator?.next is 'function'
+      do __throw_not_sequential__ unless typeof iterator?.next is 'function'
       iterator
 
     callable = ( object ) ->
@@ -79,15 +94,6 @@ to an iterator.
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
 
-    __send_to_output__ = ( out, value, done ) ->
-      out.value = value
-      out.done = done
-      out
-
-    __send_part_to_output__ = ( out, array ) ->
-      a = array.slice()
-      __send_to_output__ out, ( -> new ArrayIterator a ), no
-
 
 
 ### IteratorOutput
@@ -109,7 +115,7 @@ to an iterator.
 
       next: ->
         { array, index, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         if index < array.length
           out.value = array[ index ]
         else
@@ -129,7 +135,7 @@ to an iterator.
 
       next: ->
         { array, index, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         if index < array.length
           out.value[0] = array[ index ]
           out.value[1] = array[ index + 1 ]
@@ -156,7 +162,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         out.done = yes
         out
 
@@ -180,7 +186,7 @@ Return sequences as functions that return specifically typed iterators.
         @out = new IteratorOutput
 
       next: ->
-        assertUnfinished out = @out
+        __assert_unfinished__ out = @out
         { value, done } = @source.next()
         if done
           { value, done } = ( @source = iteratorOf @sequence ).next()
@@ -227,7 +233,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { sources, column, index, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         { length } = sources
         unless index
           column.length = 0
@@ -258,7 +264,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { value, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         if out.done = @end <= value
           out.value = undefined
         else
@@ -278,7 +284,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { predicate, source, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         loop
           { value, done } = source.next()
           if out.done = done
@@ -309,7 +315,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { sources, values, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         for source in sources
           { value, done } = source.next()
           if out.done = done
@@ -329,7 +335,7 @@ Return sequences as functions that return specifically typed iterators.
       @variadic = MapIterator_variadic
 
       next: ->
-        assertUnfinished out = @out
+        __assert_unfinished__ out = @out
         { value, done } = @source.next()
         if out.done = done
           out.value = undefined
@@ -370,7 +376,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { fn, out, source, pre } = this
-        assertUnfinished out
+        __assert_unfinished__ out
 
         unless source?
           return __send_to_output__ out, undefined, yes
@@ -402,7 +408,7 @@ Return sequences as functions that return specifically typed iterators.
         @out = new IteratorOutput
 
       next: ->
-        assertUnfinished out = @out
+        __assert_unfinished__ out = @out
         { value, done } = @source.next()
         if done
           if sequence = @sequences[ ++@index ]
@@ -443,7 +449,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { size, padding, source, gap, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         return __send_to_output__ out, undefined, yes unless @source?
 
         i = 0; part = gap < 0 and @part or []; while part.length < size
@@ -482,7 +488,7 @@ Return sequences as functions that return specifically typed iterators.
 
       next: ->
         { fn, source, part, out } = this
-        assertUnfinished out
+        __assert_unfinished__ out
         return __send_to_output__ out, undefined, yes unless source?
 
         loop
@@ -516,7 +522,7 @@ Return sequences as functions that return specifically typed iterators.
         @out = new IteratorOutput
 
       next: ->
-        assertUnfinished out = @out
+        __assert_unfinished__ out = @out
         { value, done } = @source.next()
         if not done and @predicate value, @count++
           out.value = value
@@ -541,7 +547,7 @@ Return sequences as functions that return specifically typed iterators.
         @out.done = done
 
       next: ->
-        assertUnfinished out = @out
+        __assert_unfinished__ out = @out
         { value, done } = @source.next()
         if out.done = done
           out.value = undefined
