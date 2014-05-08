@@ -26,8 +26,7 @@ Sequence.range( end )
 Sequence.range( start, end )
 Sequence.range( start, end, step )
 // >>> Sequence
-```
-```js
+
 range()
 range( end )
 range( start, end )
@@ -60,8 +59,7 @@ Given a nominally pure function `f` and seed value `x`, defines a sequence of `x
 
 ```js
 Sequence.iterate( fn, seed )  // >>> Sequence
-```
-```js
+
 iterate( fn, seed )  // >>> function
 ```
 
@@ -81,8 +79,7 @@ Given a value `x`, defines a repeating infinite sequence of `x`, or a finite seq
 Sequence.repeat( value )
 Sequence.repeat( value, limit )
 // >>> Sequence
-```
-```js
+
 repeat( value )
 repeat( value, limit )
 // >>> function
@@ -105,8 +102,7 @@ Defines an infinite sequence that repeats the items in `sequence` indefinitely.
 
 ```js
 Sequence.cycle()  // >>> Sequence
-```
-```js
+
 cycle( sequence )  // >>> function
 ```
 
@@ -128,8 +124,7 @@ Applies a nominally pure `predicate` to each item in `sequence` and keeps those 
 ```js
 Sequence().filter( predicate )
 // >>> Sequence
-```
-```js
+
 filter( predicate, sequence )
 // >>> function
 ```
@@ -156,8 +151,7 @@ Applies `fn` to successive items of one or more sequences.
 ```js
 Sequence().map( fn, ...sequences )
 // >>> Sequence
-```
-```js
+
 map( fn, sequence, ...sequences )
 ```
 
@@ -200,8 +194,7 @@ If no `seed` is provided, the first value of the sequence is used as the `seed` 
 Sequence().reduce( fn, seed )
 Sequence().reduce( fn )
 // >>> *
-```
-```js
+
 reduce( fn, seed, sequence )
 reduce( fn, sequence )
 // >>> *
@@ -224,8 +217,7 @@ Produces a sequence of the intermediate values in a `reduce` operation.
 Sequence().reductions( fn, seed )
 Sequence().reductions( fn )
 // >>> Sequence
-```
-```js
+
 reductions( fn, seed, sequence )
 reductions( fn, sequence )
 // >>> function
@@ -251,8 +243,7 @@ Concatenates sequences.
 
 ```js
 Sequence().concat( ...sequences )  // >>> Sequence
-```
-```js
+
 concat( sequence, ...sequences )  // >>> function
 ```
 
@@ -279,8 +270,7 @@ Sequence().partition( size, stride, padding )
 Sequence().partition( size, stride )
 Sequence().partition( size )
 // >>> Sequence
-```
-```js
+
 partition( size, stride, padding, sequence )
 partition( size, stride, sequence )
 partition( size, sequence )
@@ -319,8 +309,7 @@ Applies `fn` to each value in `sequence`, partitioning it into subsequences each
 
 ```js
 Sequence().partitionBy( fn )  // >>> Sequence
-```
-```js
+
 partitionBy( fn, sequence )  // >>> function
 ```
 
@@ -361,8 +350,7 @@ Sequence("Leeeeeerrrrooyyy")
 ```js
 Sequence.interleave( ...sequences )
 // >>> Sequence
-```
-```js
+
 interleave( ...sequences )
 // >>> function
 ```
