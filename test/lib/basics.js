@@ -22,6 +22,12 @@
       array = Sequence([1, 2, 3]).cycle().take(10).toArray();
       return expect(array.join(' ')).to.equal('1 2 3 1 2 3 1 2 3 1');
     });
+    it("does `reduce`", function() {
+      expect(Sequence().reduce(sum)).to.equal(0);
+      expect(Sequence().reduce(multiply)).to.equal(1);
+      expect(Sequence([42]).reduce(sum)).to.equal(42);
+      return expect(Sequence([42, 58]).reduce(sum)).to.equal(100);
+    });
     it("does `concat`", function() {
       var array;
       array = Sequence([4]).concat(Sequence.range(1, 4).cycle()).take(20).toArray();

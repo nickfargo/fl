@@ -357,24 +357,34 @@ Return sequences as functions that return specifically typed iterators.
       -> new ReductionIterator fn, seed, iteratorOf sequence
 
     class ReductionIterator
-      constructor: ( @fn, @seed, @source ) ->
-        @out = out = new IteratorOutput
+      constructor: ( @fn, seed, @source ) ->
         if seed?
-          out.value = seed
+          value = seed
         else
-          first = source.next()
-          out.value = first.value
-          out.done = first.done
+          { value, done } = source.next()
+          if done
+            value = fn()
+            @fn = null # signals `next` that `source` is 0 length
+        @pre = value
+        @out = new IteratorOutput
 
       next: ->
-        { fn, source, out } = this
+        { fn, out, source, pre } = this
         assertUnfinished out
-        previous = out.value
-        { value, done } = @source.next()
-        if out.done = done
-          out.value = undefined
+
+        unless source?
+          return __send_to_output__ out, undefined, yes
+
+        unless fn?
+          @source = null
+          return __send_to_output__ out, pre, no
+
+        { value, done } = source.next()
+        __send_to_output__ out, pre, no
+        if done
+          @source = null
         else
-          out.value = fn previous, value
+          @pre = fn pre, value
         out
 
 

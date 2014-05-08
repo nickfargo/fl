@@ -45,6 +45,16 @@
         expect array.join ' '
           .to.equal '1 2 3 1 2 3 1 2 3 1'
 
+      it "does `reduce`", ->
+        expect Sequence().reduce sum
+          .to.equal 0
+        expect Sequence().reduce multiply
+          .to.equal 1
+        expect Sequence([42]).reduce sum
+          .to.equal 42
+        expect Sequence([42,58]).reduce sum
+          .to.equal 100
+
       it "does `concat`", ->
         array = Sequence [4]
           .concat Sequence.range(1,4).cycle()
