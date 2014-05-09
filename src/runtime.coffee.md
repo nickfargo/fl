@@ -10,9 +10,10 @@ functions together with a set of derived operations expressed functionally.
 
 An **iterator** is any object that conforms to the [ES6 Iterator protocol][0].
 
-A **sequence**, and likewise values dereferenced from a `sequence` identifier,
-may be either a proper `Sequence` instance, or a function that creates and
-returns an iterator, such as a generator function.
+A lazy **sequence**, and likewise values dereferenced from a `sequence`
+identifier, may be either a proper `Sequence` instance, or a logical sequence
+in the form of a function that creates and returns an iterator, such as a
+generator function.
 
 Most of this module’s **sequencing functions** are paired with a corresponding
 **iterator class** (e.g. `range` and `RangeIterator`) that defines a `next`
@@ -74,12 +75,6 @@ to an iterator.
       then object
       else generatorOf object
 
-    identity  = (x) -> x
-    increment = (x) -> x + 1
-    decrement = (x) -> x - 1
-    isEven    = (x) -> x % 2 is 0
-    isOdd     = (x) -> y = x % 2; y is 1 or y is -1
-
     sum = ->
       x = 0; i = 0; while i < arguments.length
         x += arguments[i++]
@@ -90,20 +85,23 @@ to an iterator.
         x *= arguments[i++]
       x
 
-    compare = ( a, b ) -> if a < b then -1 else if a > b then 1 else 0
-
-    complement = ( predicate ) -> -> not predicate.apply this, arguments
-
-
-
-### IteratorOutput
-
-    class IteratorOutput
-      constructor: ( @value ) -> @done = no
+    toArray = ( sequence, limit = Infinity ) ->
+      out = []
+      return out unless sequence?
+      iterator = iteratorOf sequence
+      i = 0; while i++ < limit
+        { value, done } = iterator.next()
+        break if done
+        out.push value
+      out
 
 
 
 ### General iterator classes
+
+
+    class IteratorOutput
+      constructor: ( @value ) -> @done = no
 
 
 #### ArrayIterator
@@ -308,6 +306,19 @@ Return sequences as functions that return specifically typed iterators.
     __map_variadic__ = ( fn, sequences ) -> ->
       new MapIterator_variadic fn, toArray __map_one__ iteratorOf, sequences
 
+    class MapIterator
+      constructor: ( @fn, @source ) ->
+        @out = new IteratorOutput
+
+      next: ->
+        __assert_unfinished__ out = @out
+        { value, done } = @source.next()
+        if out.done = done
+          out.value = undefined
+        else
+          out.value = @fn value
+        out
+
     class MapIterator_variadic
       constructor: ( @fn, @sources ) ->
         @values = []
@@ -326,21 +337,6 @@ Return sequences as functions that return specifically typed iterators.
         out.value = @fn.apply null, values
         out.done = no
         values.length = 0
-        out
-
-    class MapIterator
-      constructor: ( @fn, @source ) ->
-        @out = new IteratorOutput
-
-      @variadic = MapIterator_variadic
-
-      next: ->
-        __assert_unfinished__ out = @out
-        { value, done } = @source.next()
-        if out.done = done
-          out.value = undefined
-        else
-          out.value = @fn value
         out
 
 
@@ -556,35 +552,15 @@ Return sequences as functions that return specifically typed iterators.
         out
 
 
-#### toArray
 
-    toArray = ( sequence, limit = Infinity ) ->
-      out = []
-      return out unless sequence?
-      iterator = iteratorOf sequence
-      i = 0; while i++ < limit
-        { value, done } = iterator.next()
-        break if done
-        out.push value
-      out
-
-
-
-
+* * *
 
     module.exports = {
-      identity
-      increment
-      decrement
-      isEven
-      isOdd
+      generatorOf
       sum
       multiply
-      complement
+      toArray
       empty
-      generatorOf
-      iteratorOf
-      callable
       repeat
       cycle
       iterate
@@ -599,21 +575,4 @@ Return sequences as functions that return specifically typed iterators.
       partitionBy
       takeWhile
       dropWhile
-      toArray
-
-      IteratorOutput
-      ArrayIterator
-      PairwiseArrayIterator
-      EmptyIterator
-      RepeatIterator
-      InterleaveIterator
-      RangeIterator
-      FilterIterator
-      MapIterator
-      ReductionIterator
-      ConcatIterator
-      PartitionIterator
-      PartitionByIterator
-      TakeIterator
-      DropIterator
     }

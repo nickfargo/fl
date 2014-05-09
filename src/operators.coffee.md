@@ -1,18 +1,10 @@
 ## operators
 
     {
-      identity
-      increment
-      decrement
-      isEven
-      isOdd
       sum
       multiply
-      complement
       empty
-      nullGenerator
       generatorOf
-      callable
       repeat
       cycle
       iterate
@@ -37,6 +29,18 @@
 
 
 
+    identity  = (x) -> x
+    increment = (x) -> x + 1
+    decrement = (x) -> x - 1
+    isEven    = (x) -> x % 2 is 0
+    isOdd     = (x) -> y = x % 2; y is 1 or y is -1
+    compare   = (x,y) -> if x < y then -1 else if x > y then 1 else 0
+
+
+
+    complement = ( predicate ) -> -> not predicate.apply this, arguments
+
+
     apply = ( fn, sequence ) ->
       fn.apply this, toArray sequence
 
@@ -44,6 +48,10 @@
     partial = ( fn ) ->
       applied = slice.call arguments, 1
       -> fn.apply this, applied.concat slice.call arguments
+
+
+    first = ( sequence ) ->
+      sequence.call().next().value
 
 
     rest = partial dropWhile, ( v, i ) -> i < 1
@@ -110,7 +118,6 @@ value -> sequence
 
       {
         generatorOf
-        callable
         iterate
         repeat
         range
@@ -123,6 +130,7 @@ value -> sequence
 sequence -> value
 
       {
+        first
         toArray
         reduce
         splitAt
