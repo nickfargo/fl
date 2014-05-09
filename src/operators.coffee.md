@@ -9,6 +9,7 @@
       sum
       multiply
       complement
+      empty
       nullGenerator
       generatorOf
       callable
@@ -31,14 +32,21 @@
       require './runtime'
 
 
+    { slice } = Array::
+
+
 
 
     apply = ( fn, sequence ) ->
       fn.apply this, toArray sequence
 
 
-    rest = ( sequence ) ->
-      drop 1, sequence
+    partial = ( fn ) ->
+      applied = slice.call arguments, 1
+      -> fn.apply this, applied.concat slice.call arguments
+
+
+    rest = partial dropWhile, ( v, i ) -> i < 1
 
 
     remove = ( predicate, sequence ) ->
@@ -94,6 +102,7 @@ value -> value
 function -> function
 
       {
+        partial
         complement
       }
 
