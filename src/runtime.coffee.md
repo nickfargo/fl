@@ -559,9 +559,9 @@ Return sequences as functions that return specifically typed iterators.
 #### toArray
 
     toArray = ( sequence, limit = Infinity ) ->
-      throw new TypeError unless sequence?
-      iterator = iteratorOf sequence
       out = []
+      return out unless sequence?
+      iterator = iteratorOf sequence
       i = 0; while i++ < limit
         { value, done } = iterator.next()
         break if done
