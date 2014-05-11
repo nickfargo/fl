@@ -1,10 +1,12 @@
 ## operators
 
     {
+      generatorOf
+      iteratorOf
       sum
       multiply
+      toArray
       empty
-      generatorOf
       repeat
       cycle
       iterate
@@ -19,7 +21,6 @@
       partitionBy
       takeWhile
       dropWhile
-      toArray
     } =
       require './runtime'
 
@@ -37,22 +38,18 @@
     compare   = (x,y) -> if x < y then -1 else if x > y then 1 else 0
 
 
-
     complement = ( predicate ) -> -> not predicate.apply this, arguments
 
-
-    apply = ( fn, sequence ) ->
-      fn.apply this, toArray sequence
-
+    compose = ( fns... ) -> (x) -> x = fn x for fn in fns; x
 
     partial = ( fn ) ->
       applied = slice.call arguments, 1
       -> fn.apply this, applied.concat slice.call arguments
 
 
-    first = ( sequence ) ->
-      sequence.call().next().value
+    apply = ( fn, sequence ) -> fn.apply this, toArray sequence
 
+    first = ( sequence ) -> ( iteratorOf sequence ).next().value
 
     rest = partial dropWhile, ( v, i ) -> i < 1
 
@@ -110,8 +107,9 @@ value -> value
 function -> function
 
       {
-        partial
         complement
+        compose
+        partial
       }
 
 value -> sequence
