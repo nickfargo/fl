@@ -40,7 +40,11 @@
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
 
-    compose = ( fns... ) -> (x) -> x = fn x for fn in fns; x
+
+    compose = ->
+      fns = slice.call arguments
+      ( value ) -> value = fn value for fn in fns; value
+
 
     partial = ( fn ) ->
       applied = slice.call arguments, 1
@@ -49,7 +53,9 @@
 
     apply = ( fn, sequence ) -> fn.apply this, toArray sequence
 
+
     first = ( sequence ) -> ( iteratorOf sequence ).next().value
+
 
     rest = partial dropWhile, ( v, i ) -> i < 1
 
