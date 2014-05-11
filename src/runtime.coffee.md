@@ -358,6 +358,16 @@ Return sequences as functions that return specifically typed iterators.
         seed = undefined
       -> new ReductionIterator fn, seed, iteratorOf sequence
 
+Reduction iterators, in the case of a zero-length `source`, must yield a single
+value: the result of calling `fn` with no arguments. For a proper monoidal
+reducer, this will be its associated **identity value** (e.g.: `sum` → 0;
+`multiply` → 1; collection reducers → empty-collection; etc.).
+
+In this implementation, a single iteration is produced from a zero-length
+`source` by releasing `fn` in the constructor immediately after it is called
+with no arguments, which signals to `next` that the iterator should yield the
+`value` held in `pre` once, and then terminate.
+
     class ReductionIterator
       constructor: ( @fn, seed, @source ) ->
         if seed?
@@ -366,7 +376,7 @@ Return sequences as functions that return specifically typed iterators.
           { value, done } = source.next()
           if done
             value = fn()
-            @fn = null # signals `next` that `source` is 0 length
+            @fn = null
         @pre = value
         @out = new IteratorOutput
 
