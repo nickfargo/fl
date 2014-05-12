@@ -109,7 +109,7 @@ Given a function `fn` and successive arguments `args` fewer in number than the e
 ```js
 addFive = partial( sum, 5 );
 addFive(2);
-// >>> 7
+7
 
 rest = partial( dropWhile, function ( value, index ) {
   return index < 1;
@@ -117,12 +117,12 @@ rest = partial( dropWhile, function ( value, index ) {
 // >>> function
 
 toArray( rest( range(4) ) );
-// >>> [ 1, 2, 3 ]
+[ 1, 2, 3 ]
 
 toArray( rest( function* () {
   yield 2; yield 4; yield 6; yield 8;
 }));
-// >>> [ 4, 6, 8 ]
+[ 4, 6, 8 ]
 ```
 
 
@@ -148,8 +148,11 @@ first( sequence )
 Returns the first element in `sequence`.
 
 ```js
-first( range(4) );  // >>> 0
-first([]);          // >>> undefined
+first( range(4) );
+0
+
+first([]);
+undefined
 ```
 
 Logically equivalent to `take( 1, sequence )().next().value`.
@@ -164,12 +167,17 @@ rest( sequence )
 Returns a logical sequence of the elements that follow the `first` element of `sequence`.
 
 ```js
-toArray( rest([ 0, 1, 2, 3 ]) );  // >>> [ 1, 2, 3 ]
-toArray( rest([ 1 ]) );           // >>> []
-toArray( rest( [] ) );            // >>> []
+toArray( rest([ 0, 1, 2, 3 ]) );
+[ 1, 2, 3 ]
+
+toArray( rest([ 1 ]) );
+[]
+
+toArray( rest( [] ) );
+[]
 
 Sequence.range( 3, Infinity ).rest().take(4).toArray();
-// >>> [ 4, 5, 6, 7 ]
+[ 4, 5, 6, 7 ]
 ```
 
 Logically equivalent to `drop( 1, sequence )`.
