@@ -74,19 +74,24 @@ Returns the sum of `0` and zero or more `addends`.
 #### multiply
 
 ```js
-multiply( ...multiplicands )
+multiply( ...factors )
 ```
 
-Returns the product of `1` and zero or more `multiplicands`.
+Returns the product of `1` and zero or more `factors`.
 
 
 #### complement
 
 ```js
-complement( fn )
+complement( predicate )
 ```
 
 Returns a function that returns the logical negation of the result of applying `predicate`.
+
+```js
+complement( isEven )(3);
+true
+```
 
 
 #### compose
