@@ -569,6 +569,7 @@ with no arguments, which signals to `next` that the iterator should yield the
 
     module.exports = {
       generatorOf
+      iteratorOf
       sum
       multiply
       toArray
