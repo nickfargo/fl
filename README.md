@@ -457,11 +457,6 @@ Sequence
 ```
 
 
-#### takeUntil
-
-Returns `takeWhile( complement( predicate ), sequence )`.
-
-
 #### drop
 
 ```js
@@ -486,11 +481,6 @@ dropWhile( predicate, sequence )
 ```
 
 Returns a sequence of the items in `sequence` that would be excluded from the subsequences returned by an equivalent `takeWhile` operation.
-
-
-#### dropUntil
-
-Returns `dropWhile( complement( predicate ), sequence )`.
 
 
 #### concat

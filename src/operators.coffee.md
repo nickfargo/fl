@@ -72,16 +72,8 @@
       takeWhile ( ( v, i ) -> i < amount ), sequence
 
 
-    takeUntil = ( predicate, sequence ) ->
-      takeWhile ( complement predicate ), sequence
-
-
     drop = ( amount, sequence ) ->
       dropWhile ( ( v, i ) -> i < amount ), sequence
-
-
-    dropUntil = ( predicate, sequence ) ->
-      dropWhile ( complement predicate ), sequence
 
 
     splitAt = ( ordinal, sequence ) ->
@@ -167,10 +159,8 @@ arg, sequence, ... -> sequence
         partitionBy
         take
         takeWhile
-        takeUntil
         drop
         dropWhile
-        dropUntil
       }
 
     ]
