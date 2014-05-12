@@ -142,7 +142,11 @@ Returns the result of applying `fn` with each element in `sequence` as arguments
 #### first
 
 ```js
+Sequence().first()
+// >>> *
+
 first( sequence )
+// >>> *
 ```
 
 Returns the first element in `sequence`.
@@ -161,7 +165,11 @@ Logically equivalent to `take( 1, sequence )().next().value`.
 #### rest
 
 ```js
+Sequence().rest()
+// >>> Sequence
+
 rest( sequence )
+// >>> function
 ```
 
 Returns a logical sequence of the elements that follow the `first` element of `sequence`.
@@ -225,9 +233,11 @@ toArray( range(3,9,2) );
 Given a nominally pure function `f` and *seed* value `x`, defines an infinite sequence of `x`, `f(x)`, `f(f(x))`, etc.
 
 ```js
-Sequence.iterate( fn, seed )  // >>> Sequence
+Sequence.iterate( fn, seed )
+// >>> Sequence
 
-iterate( fn, seed )  // >>> function
+iterate( fn, seed )
+// >>> function
 ```
 
 Returns a `Sequence` or sequence generator function.
@@ -268,9 +278,11 @@ Sequence.repeat( 'foo', 5 );
 Defines an infinite sequence that repeats the items in `sequence` indefinitely.
 
 ```js
-Sequence.cycle()  // >>> Sequence
+Sequence.cycle()
+// >>> Sequence
 
-cycle( sequence )  // >>> function
+cycle( sequence )
+// >>> function
 ```
 
 Returns a `Sequence` or sequence generator function.
@@ -316,9 +328,11 @@ Performs a `filter` on the `complement` of the provided `predicate`.
 Applies `fn` to successive items of one or more sequences.
 
 ```js
-Sequence().map( fn, ...sequences )  // >>> Sequence
+Sequence().map( fn, ...sequences )
+// >>> Sequence
 
-map( fn, sequence, ...sequences )  // >>> function
+map( fn, sequence, ...sequences )
+// >>> function
 ```
 
 The arity of `fn` should correspond with the number of sequences to be mapped.
@@ -408,9 +422,11 @@ factorialSequence(10).toArray();
 Defines a sequence of up to `amount` items taken successively from `sequence`, or
 
 ```js
-Sequence().take( amount )  // >>> Sequence
+Sequence().take( amount )
+// >>> Sequence
 
-take( amount, sequence )  // >>> function
+take( amount, sequence )
+// >>> function
 ```
 
 Returns a `Sequence` or sequence generator function.
@@ -421,9 +437,11 @@ Returns a `Sequence` or sequence generator function.
 Defines a sequence of items taken successively from `sequence` so long as the expression `!!predicate( item )` remains equal to `true`.
 
 ```js
-Sequence().takeWhile( predicate )  // >>> Sequence
+Sequence().takeWhile( predicate )
+// >>> Sequence
 
-takeWhile( predicate, sequence )  // >>> function
+takeWhile( predicate, sequence )
+// >>> function
 ```
 
 Returns a `Sequence` or sequence generator function.
@@ -447,9 +465,11 @@ Returns `takeWhile( complement( predicate ), sequence )`.
 #### drop
 
 ```js
-Sequence().drop( amount )  // >>> Sequence
+Sequence().drop( amount )
+// >>> Sequence
 
-drop( amount, sequence )  // >>> function
+drop( amount, sequence )
+// >>> function
 ```
 
 Returns a sequence of the items in `sequence` that would be excluded from the subsequence returned by an equivalent `take` operation.
@@ -458,9 +478,11 @@ Returns a sequence of the items in `sequence` that would be excluded from the su
 #### dropWhile
 
 ```js
-Sequence().dropWhile( predicate )  // >>> Sequence
+Sequence().dropWhile( predicate )
+// >>> Sequence
 
-dropWhile( predicate, sequence )  // >>> function
+dropWhile( predicate, sequence )
+// >>> function
 ```
 
 Returns a sequence of the items in `sequence` that would be excluded from the subsequences returned by an equivalent `takeWhile` operation.
@@ -476,9 +498,11 @@ Returns `dropWhile( complement( predicate ), sequence )`.
 Concatenates sequences.
 
 ```js
-Sequence().concat( ...sequences )  // >>> Sequence
+Sequence().concat( ...sequences )
+// >>> Sequence
 
-concat( sequence, ...sequences )  // >>> function
+concat( sequence, ...sequences )
+// >>> function
 ```
 
 Returns a single `Sequence`, or a sequence generator function, that is the concatentation of each sequence in the order they are provided.
@@ -548,9 +572,11 @@ Sequence.range(4).partition(10,10,[]).map( toArray ).toArray();
 Applies `fn` to each value in `sequence`, partitioning it into subsequences each time `fn` returns a new value.
 
 ```js
-Sequence().partitionBy( fn )  // >>> Sequence
+Sequence().partitionBy( fn )
+// >>> Sequence
 
-partitionBy( fn, sequence )  // >>> function
+partitionBy( fn, sequence )
+// >>> function
 ```
 
 Returns a `Sequence` of partitions, or a sequence generator function that returns an iterator over the partitions, where each partition is itself a sequence generator function that returns an iterator over the elements of the partition.
