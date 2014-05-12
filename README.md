@@ -95,17 +95,7 @@ Returns a function that returns the logical negation of the result of applying `
 compose( ...fns )
 ```
 
-Returns the composition of a series of functions `fns`, such that
-
-```js
-compose( f, g, h )(x)
-```
-
-is equivalent to
-
-```js
-f(g(h(x)))
-```
+Returns the composition of a series of functions `fns`, such that `compose(f,g,h)(x)` is equivalent to `f(g(h(x)))`.
 
 
 #### partial
