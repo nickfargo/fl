@@ -546,19 +546,21 @@ with no arguments, which signals to `next` that the iterator should yield the
 
     class DropIterator
       constructor: ( @predicate, @source ) ->
-        count = 0; while not done and predicate value, count++
+        count = 0; loop
           { value, done } = source.next()
-        @count = count
-        @out = new IteratorOutput value
-        @out.done = done
+          break if done or not predicate value, count++
+        @source = null if done
+        @value = value
+        @out = new IteratorOutput
 
       next: ->
-        __assert_unfinished__ out = @out
+        { out, source } = this
+        __assert_unfinished__ out
+        return __send_to_output__ out, undefined, yes unless source?
+        __send_to_output__ out, @value, no
         { value, done } = @source.next()
-        if out.done = done
-          out.value = undefined
-        else
-          out.value = value
+        @value = value
+        @source = null if done
         out
 
 
