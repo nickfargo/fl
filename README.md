@@ -13,7 +13,176 @@ Functional lazy operators and sequences.
 ## API
 
 
+
+### General value operators
+
+
+#### identity
+
+```js
+identity( value )
+```
+
+Returns `value`.
+
+
+#### increment
+
+```js
+increment( value )
+```
+
+Returns `value + 1`.
+
+
+#### decrement
+
+```js
+decrement( value )
+```
+
+Returns `value - 1`.
+
+
+#### isEven
+
+```js
+isEven( value )
+```
+
+Returns `value % 2 === 0`.
+
+
+#### isOdd
+
+```js
+isOdd( value )
+```
+
+Returns `value % 2 === 1 || value % 2 === -1`.
+
+
+#### sum
+
+```js
+sum( ...addends )
+```
+
+Returns the sum of `0` and zero or more `addends`.
+
+
+#### multiply
+
+```js
+multiply( ...multiplicands )
+```
+
+Returns the product of `1` and zero or more `multiplicands`.
+
+
+#### complement
+
+```js
+complement( fn )
+```
+
+Returns a function that returns the logical negation of the result of applying `predicate`.
+
+
+#### compose
+
+```js
+compose( ...fns )
+```
+
+Returns the composition of a series of functions `fns`, such that
+
+```js
+compose( f, g, h )(x)
+```
+
+is equivalent to
+
+```js
+f(g(h(x)))
+```
+
+
+#### partial
+
+```js
+partial( fn, ...args )
+```
+
+Given a function `fn` and successive arguments `args` fewer in number than the expected number of parameters for `fn`, returns a function that will return the result of applying `fn` to the concatentation of `args` and its own arguments.
+
+```js
+addFive = partial( sum, 5 );
+addFive(2);
+// >>> 7
+
+rest = partial( dropWhile, function ( value, index ) {
+  return index < 1;
+});
+// >>> function
+
+toArray( rest( range(4) ) );
+// >>> [ 1, 2, 3 ]
+
+toArray( rest( function* () {
+  yield 2; yield 4; yield 6; yield 8;
+}));
+// >>> [ 4, 6, 8 ]
+```
+
+
+#### apply
+
+```js
+apply( fn, sequence )
+```
+
+Returns the result of applying `fn` with each element in `sequence` as arguments.
+
+
+
 ### Sequential functions
+
+
+#### first
+
+```js
+first( sequence )
+```
+
+Returns the first element in `sequence`.
+
+```js
+first( range(4) );  // >>> 0
+first([]);          // >>> undefined
+```
+
+Logically equivalent to `take( 1, sequence )().next().value`.
+
+
+#### rest
+
+```js
+rest( sequence )
+```
+
+Returns a logical sequence of the elements that follow the `first` element of `sequence`.
+
+```js
+toArray( rest([ 0, 1, 2, 3 ]) );  // >>> [ 1, 2, 3 ]
+toArray( rest([ 1 ]) );           // >>> []
+toArray( rest( [] ) );            // >>> []
+
+Sequence.range( 3, Infinity ).rest().take(4).toArray();
+// >>> [ 4, 5, 6, 7 ]
+```
+
+Logically equivalent to `drop( 1, sequence )`.
 
 
 #### range
@@ -55,7 +224,7 @@ toArray( range(3,9,2) );
 
 #### iterate
 
-Given a nominally pure function `f` and seed value `x`, defines a sequence of `x`, `f(x)`, `f(f(x))`, etc.
+Given a nominally pure function `f` and *seed* value `x`, defines an infinite sequence of `x`, `f(x)`, `f(f(x))`, etc.
 
 ```js
 Sequence.iterate( fn, seed )  // >>> Sequence
@@ -149,10 +318,9 @@ Performs a `filter` on the `complement` of the provided `predicate`.
 Applies `fn` to successive items of one or more sequences.
 
 ```js
-Sequence().map( fn, ...sequences )
-// >>> Sequence
+Sequence().map( fn, ...sequences )  // >>> Sequence
 
-map( fn, sequence, ...sequences )
+map( fn, sequence, ...sequences )  // >>> function
 ```
 
 The arity of `fn` should correspond with the number of sequences to be mapped.
@@ -182,7 +350,7 @@ Sequence( iterate increment, 1 ).map( sum, range(10,50,10) ).toArray();
 
 #### reduce
 
-Calls `fn` with two arguments:
+Iteratively calls `fn`, with two arguments:
 
   1. `seed` on the first iteration; thereafter, the result of the previous iteration
 
@@ -237,6 +405,74 @@ factorialSequence(10).toArray();
 ```
 
 
+#### take
+
+Defines a sequence of up to `amount` items taken successively from `sequence`, or
+
+```js
+Sequence().take( amount )  // >>> Sequence
+
+take( amount, sequence )  // >>> function
+```
+
+Returns a `Sequence` or sequence generator function.
+
+
+#### takeWhile
+
+Defines a sequence of items taken successively from `sequence` so long as the expression `!!predicate( item )` remains equal to `true`.
+
+```js
+Sequence().takeWhile( predicate )  // >>> Sequence
+
+takeWhile( predicate, sequence )  // >>> function
+```
+
+Returns a `Sequence` or sequence generator function.
+
+```js
+Sequence
+  .range()
+  .takeWhile( function (x) {
+    return Math.log(x) < 1;
+  })
+  .toArray();
+[ 0, 1, 2 ]
+```
+
+
+#### takeUntil
+
+Returns `takeWhile( complement( predicate ), sequence )`.
+
+
+#### drop
+
+```js
+Sequence().drop( amount )  // >>> Sequence
+
+drop( amount, sequence )  // >>> function
+```
+
+Returns a sequence of the items in `sequence` that would be excluded from the subsequence returned by an equivalent `take` operation.
+
+
+#### dropWhile
+
+```js
+Sequence().dropWhile( predicate )  // >>> Sequence
+
+dropWhile( predicate, sequence )  // >>> function
+```
+
+Returns a sequence of the items in `sequence` that would be excluded from the subsequences returned by an equivalent `takeWhile` operation.
+
+
+#### dropUntil
+
+Returns `dropWhile( complement( predicate ), sequence )`.
+
+
 #### concat
 
 Concatenates sequences.
@@ -259,6 +495,12 @@ Sequence('abc').concat('def', 'ghi').toArray();
 toArray( concat() );
 []
 ```
+
+
+#### splitAt
+
+
+#### splitWith
 
 
 #### partition
@@ -361,6 +603,10 @@ Given one or more `sequences`, defines a sequence consisting of the first item f
 Sequence.interleave( range(), [7,8,9] ).toArray();
 [ 0, 7, 1, 8, 2, 9 ]  // no `3`
 ```
+
+
+#### interpose
+
 
 
 
