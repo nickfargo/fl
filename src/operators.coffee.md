@@ -43,7 +43,7 @@
 
     compose = ->
       fns = slice.call arguments
-      ( value ) -> value = fn value for fn in fns; value
+      ( value ) -> i = fns.length; value = fns[i] value while i--; value
 
 
     partial = ( fn ) ->
