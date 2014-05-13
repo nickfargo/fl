@@ -49,9 +49,18 @@ to an iterator.
     __throw_not_sequential__ = ->
       throw new Error "Object is not sequential"
 
+    __throw_type_mismatch__ = ->
+      throw new Error "Type mismatch"
+
+    __throw_not_comparable__ = ->
+      throw new Error "Operands not comparable"
+
 
 
 ### Utility functions
+
+
+#### generatorOf
 
     generatorOf = ( iterable ) ->
       return empty unless iterable?
@@ -65,25 +74,40 @@ to an iterator.
         -> new ArrayIterator iterable
       else empty
 
+
+#### iteratorOf
+
     iteratorOf = ( sequence ) ->
       iterator = ( callable sequence )?.call?()
       do __throw_not_sequential__ unless typeof iterator?.next is 'function'
       iterator
+
+
+#### callable
 
     callable = ( object ) ->
       if typeof object.call is 'function'
       then object
       else generatorOf object
 
+
+#### sum
+
     sum = ->
       x = 0; i = 0; while i < arguments.length
         x += arguments[i++]
       x
 
+
+#### multiply
+
     multiply = ->
       x = 1; i = 0; while i < arguments.length
         x *= arguments[i++]
       x
+
+
+#### toArray
 
     toArray = ( sequence, limit = Infinity ) ->
       out = []
@@ -94,6 +118,45 @@ to an iterator.
         break if done
         out.push value
       out
+
+
+#### compare
+
+    compare = ( x, y ) ->
+      comparison = __compare_nils__ x, y
+      return comparison if comparison?
+
+      t = typeof x
+      u = typeof y
+
+      if t is 'number' and u is 'number' or t is 'string' and u is 'string'
+        if x > y then 1 else if x < y then -1 else 0
+      else if typeof x.call is 'function' and typeof y.call is 'function'
+        __compare_sequences__ x, y
+      else
+        x.compare?(y) ? x.compareTo?(y) ? do __throw_not_comparable__
+
+    __compare_nils__ = ( x, y ) ->
+      nilX = not x? or x is false or typeof x is 'number' and isNaN x
+      nilY = not y? or y is false or typeof y is 'number' and isNaN y
+
+      return  0 if nilX and nilY
+      return -1 if nilX
+      return  1 if nilY
+
+    __compare_sequences__ = ( sequenceX, sequenceY ) ->
+      xSource = sequenceX.call()
+      ySource = sequenceY.call()
+
+      loop
+        { value:xValue, done:xDone } = xSource.next()
+        { value:yValue, done:yDone } = ySource.next()
+
+        return  0 if xDone and yDone
+        return -1 if xDone
+        return  1 if yDone
+
+        return comparison if comparison = compare xValue, yValue
 
 
 
@@ -573,6 +636,7 @@ with no arguments, which signals to `next` that the iterator should yield the
       sum
       multiply
       toArray
+      compare
       empty
       repeat
       cycle

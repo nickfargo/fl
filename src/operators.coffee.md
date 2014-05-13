@@ -5,6 +5,7 @@
       iteratorOf
       sum
       multiply
+      compare
       toArray
       empty
       repeat
@@ -35,7 +36,6 @@
     decrement = (x) -> x - 1
     isEven    = (x) -> x % 2 is 0
     isOdd     = (x) -> y = x % 2; y is 1 or y is -1
-    compare   = (x,y) -> if x < y then -1 else if x > y then 1 else 0
 
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
@@ -66,6 +66,11 @@
 
     interpose = ( separator, sequence ) ->
       rest interleave ( repeat separator ), sequence
+
+
+    sort = ( fn, sequence ) ->
+      if not sequence? then sequence = fn; fn = compare
+      generatorOf ( toArray sequence ).sort fn
 
 
     take = ( amount, sequence ) ->
@@ -99,6 +104,7 @@ value -> value
         isOdd
         sum
         multiply
+        compare
         apply
       }
 
@@ -151,6 +157,7 @@ arg, sequence, ... -> sequence
       {
         rest
         interpose
+        sort
         filter
         remove
         reductions
