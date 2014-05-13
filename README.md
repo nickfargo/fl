@@ -224,31 +224,31 @@ apply( decreasing, 'sniffed' );  // >>> false
 ```
 
 
-#### notDecreasing
+#### nonincreasing
 
 ```js
-notDecreasing( ...values )
-// >>> boolean
-```
-
-Returns `true` if arguments are provided in a monotonically increasing order (`<=`) as determined by `compare`; otherwise returns `false`.
-
-```js
-apply( notDecreasing, 'bees' );  // >>> true
-```
-
-
-#### notIncreasing
-
-```js
-notIncreasing( ...values )
+nonincreasing( ...values )
 // >>> boolean
 ```
 
 Returns `true` if arguments are provided in a monotonically decreasing order (`>=`) as determined by `compare`; otherwise returns `false`.
 
 ```js
-apply( notIncreasing, 'sniffed' );  // >>> true
+apply( nonincreasing, 'sniffed' );  // >>> true
+```
+
+
+#### nondecreasing
+
+```js
+nondecreasing( ...values )
+// >>> boolean
+```
+
+Returns `true` if arguments are provided in a monotonically increasing order (`<=`) as determined by `compare`; otherwise returns `false`.
+
+```js
+apply( nondecreasing, 'bees' );  // >>> true
 ```
 
 

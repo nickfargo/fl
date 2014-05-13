@@ -40,8 +40,8 @@
 
     increasing     = comparisonOperator ( x, y ) -> 0 > compare x, y
     decreasing     = comparisonOperator ( x, y ) -> 0 < compare x, y
-    notIncreasing  = comparisonOperator ( x, y ) -> 0 <= compare x, y
-    notDecreasing  = comparisonOperator ( x, y ) -> 0 >= compare x, y
+    nonincreasing  = comparisonOperator ( x, y ) -> 0 <= compare x, y
+    nondecreasing  = comparisonOperator ( x, y ) -> 0 >= compare x, y
 
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
@@ -114,8 +114,8 @@ value -> value
         comparisonOperator
         increasing
         decreasing
-        notIncreasing
-        notDecreasing
+        nonincreasing
+        nondecreasing
         apply
       }
 
