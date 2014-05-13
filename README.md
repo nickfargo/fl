@@ -80,6 +80,31 @@ multiply( ...factors )
 Returns the product of `1` and zero or more `factors`.
 
 
+#### compare
+
+The default comparator function used with `sort`. Determines the ordinal relation between arguments `x` and `y`.
+
+```js
+compare( x, y );
+// >>> number
+```
+
+Returns `0` if `x` and `y` are of equal precedence, returns `-1` if `x` precedes `y`, or returns `1` if `y` precedes `x`. If `x` and `y` are logical sequences, then the comparison is evaluated recursively over the respective elements of both sequences.
+
+
+#### toArray
+
+```js
+Sequence().toArray()
+// >>> array
+
+toArray( sequence )
+// >>> array
+```
+
+Iterates through a sequence and returns its elements in an array.
+
+
 #### complement
 
 ```js
@@ -516,8 +541,55 @@ toArray( concat() );
 
 #### splitAt
 
+Divides a `sequence` into two sequences, where the first contains the first `n` elements of `sequence`, and the second contains the remaining elements of `sequence`.
+
+```js
+Sequence().splitAt( n )
+// >>> array
+
+splitAt( n, sequence )
+// >>> array
+```
+
+Returns a two-element array containing both partitions of `sequence`.
+
+```js
+Sequence('qwerty')
+  .splitAt(4)
+  .map( Sequence )
+  .map( function (s) {
+    return s.toArray().join('');
+  });
+[ 'quer', 'ty' ]
+```
+
 
 #### splitWith
+
+Divides a `sequence` into two sequences, where the first contains elements, starting from the head of `sequence`, that return logical true when `predicate` is applied to the element.
+
+```js
+Sequence().splitWith( predicate )
+// >>> array
+
+splitWith( predicate, sequence )
+// >>> array
+```
+
+Returns a two-element array containing both partitions of `sequence`.
+
+```
+function isConsonant (char) {
+  return /[^aeiouy]/i.test(char);
+}
+Sequence('schtick')
+  .splitWith( isConsonant )
+  .map( Sequence )
+  .map( function (s) {
+    return s.toArray().join('');
+  });
+[ 'scht', 'ick' ]
+```
 
 
 #### partition
@@ -609,7 +681,7 @@ Sequence("Leeeeeerrrrooyyy")
 #### interleave
 
 ```js
-Sequence.interleave( ...sequences )
+Sequence().interleave( ...sequences )
 // >>> Sequence
 
 interleave( ...sequences )
@@ -625,6 +697,50 @@ Sequence.interleave( range(), [7,8,9] ).toArray();
 
 
 #### interpose
+
+Places a `value` between each element in a `sequence`.
+
+```js
+Sequence().interpose( value )
+// >>> Sequence
+
+interpose( value, sequence )
+// >>> function
+```
+
+Returns a new logical sequence containing the `value` interposed within the elements of the original sequence.
+
+```js
+Sequence("dmtr").interpose('e').toArray();
+[ 'd', 'e', 'm', 'e', 't', 'e', 'r' ]
+```
+
+
+#### sort
+
+Sorts the contents of a finite logical sequence, as directed by a pure function `comparator` if provided, or by `compare` otherwise. Nested sequences are compared by
+
+```js
+Sequence().sort( comparator )
+Sequence().sort()
+// >>> Sequence
+
+sort( comparator, sequence )
+sort( sequence )
+// >>> function
+```
+
+Returns a new logical sequence of the sorted sequence.
+
+```js
+Sequence([ 'abduct', 'abacus', 'abated', 'abate' ])
+  .map( Sequence )
+  .sort( compare )
+  .map( toArray )
+  .map( function (a) { return a.join(''); } )
+  .toArray();
+[ 'abacus', 'abate', 'abated', 'abduct' ]
+```
 
 
 
