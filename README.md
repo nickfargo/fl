@@ -718,7 +718,7 @@ Sequence("dmtr").interpose('e').toArray();
 
 #### sort
 
-Sorts the contents of a finite logical sequence, as directed by a pure function `comparator` if provided, or by `compare` otherwise. Nested sequences are compared by
+Sorts the contents of a finite, homogeneous logical sequence, as directed by a pure function `comparator` if provided, or by `compare` otherwise. Elements of the sequence which are themselves sequences are compared by recursively comparing the respective elements of both nested sequences.
 
 ```js
 Sequence().sort( comparator )
@@ -730,7 +730,7 @@ sort( sequence )
 // >>> function
 ```
 
-Returns a new logical sequence of the sorted sequence.
+Returns a new logical sequence containing the sorted elements of the original sequence.
 
 ```js
 Sequence([ 'abduct', 'abacus', 'abated', 'abate' ])
