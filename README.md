@@ -80,18 +80,6 @@ multiply( ...factors )
 Returns the product of `1` and zero or more `factors`.
 
 
-#### compare
-
-The default comparator function used with `sort`. Determines the ordinal relation between arguments `x` and `y`.
-
-```js
-compare( x, y );
-// >>> number
-```
-
-Returns `0` if `x` and `y` are of equal precedence, returns `-1` if `x` precedes `y`, or returns `1` if `y` precedes `x`. If `x` and `y` are logical sequences, then the comparison is evaluated recursively over the respective elements of both sequences.
-
-
 #### toArray
 
 ```js
@@ -163,6 +151,105 @@ apply( fn, sequence )
 ```
 
 Returns the result of applying `fn` with each element in `sequence` as arguments.
+
+
+#### compare
+
+The default comparator function used with `sort`. Determines the ordinal relation between arguments `x` and `y`.
+
+```js
+compare( x, y )
+// >>> number
+```
+
+Returns `0` if `x` and `y` are of equal precedence, returns `-1` if `x` precedes `y`, or returns `1` if `y` precedes `x`. If `x` and `y` are logical sequences, then the comparison is evaluated recursively over the respective elements of both sequences.
+
+
+#### comparisonOperator
+
+Creates a boolean valued comparison operator.
+
+```js
+comparisonOperator( predicate )
+// >>> function
+```
+
+Returns a predicate that returns `true` if applying `predicate` to each adjacent pairing of its arguments also returns `true`, and returns `false` otherwise.
+
+```js
+nonconsecutive = comparisonOperator( compare );
+
+apply( nonconsecutive, 'fireman' );  // >>> true
+apply( nonconsecutive, 'balance' );  // >>> true
+apply( nonconsecutive, 'ladders' );  // >>> false
+```
+
+
+#### increasing
+
+```js
+increasing( ...values )
+// >>> boolean
+```
+
+Returns `true` if arguments are provided in a strictly increasing order (`<`) as determined by `compare`; otherwise returns `false`.
+
+Equivalent to `comparisonOperator( (x,y) => compare(x,y) < 0 )`.
+
+```js
+apply( increasing, [0,1,4,9] );  // >>> true
+apply( increasing, [1,1,2,3] );  // >>> false
+apply( increasing, 'gist' );     // >>> true
+apply( increasing, 'bees' );     // >>> false
+
+apply( increasing, Sequence.range().take(5) );
+// >>> true
+```
+
+
+#### decreasing
+
+```js
+decreasing( ...values )
+// >>> boolean
+```
+
+Returns `true` if arguments are provided in a strictly decreasing order (`>`) as determined by `compare`; otherwise returns `false`.
+
+```js
+apply( decreasing, [9,4,1,0] );  // >>> true
+apply( decreasing, [3,2,1,1] );  // >>> false
+apply( decreasing, 'wronged' );  // >>> true
+apply( decreasing, 'sniffed' );  // >>> false
+```
+
+
+#### notDecreasing
+
+```js
+notDecreasing( ...values )
+// >>> boolean
+```
+
+Returns `true` if arguments are provided in a monotonically increasing order (`<=`) as determined by `compare`; otherwise returns `false`.
+
+```js
+apply( notDecreasing, 'bees' );  // >>> true
+```
+
+
+#### notIncreasing
+
+```js
+notIncreasing( ...values )
+// >>> boolean
+```
+
+Returns `true` if arguments are provided in a monotonically decreasing order (`>=`) as determined by `compare`; otherwise returns `false`.
+
+```js
+apply( notIncreasing, 'sniffed' );  // >>> true
+```
 
 
 
