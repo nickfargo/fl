@@ -165,19 +165,19 @@ compare( x, y )
 Returns `0` if `x` and `y` are of equal precedence, returns `-1` if `x` precedes `y`, or returns `1` if `y` precedes `x`. If `x` and `y` are logical sequences, then the comparison is evaluated recursively over the respective elements of both sequences.
 
 
-#### comparisonOperator
+#### comparator
 
 Creates a boolean valued comparison operator.
 
 ```js
-comparisonOperator( predicate )
+comparator( predicate )
 // >>> function
 ```
 
 Returns a predicate that returns `true` if applying `predicate` to each adjacent pairing of its arguments also returns `true`, and returns `false` otherwise.
 
 ```js
-nonconsecutive = comparisonOperator( compare );
+nonconsecutive = comparator( compare );
 
 apply( nonconsecutive, 'fireman' );  // >>> true
 apply( nonconsecutive, 'balance' );  // >>> true
@@ -194,7 +194,7 @@ increasing( ...values )
 
 Returns `true` if arguments are provided in a strictly increasing order (`<`) as determined by `compare`; otherwise returns `false`.
 
-Logically equivalent to `comparisonOperator( (x,y) => compare(x,y) < 0 )`.
+Logically equivalent to `comparator( (x,y) => compare(x,y) < 0 )`.
 
 ```js
 apply( increasing, [0,1,4,9] );  // >>> true
