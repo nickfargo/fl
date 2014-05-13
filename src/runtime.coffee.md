@@ -159,6 +159,16 @@ to an iterator.
         return comparison if comparison = compare xValue, yValue
 
 
+#### comparisonOperator
+
+    comparisonOperator = ( predicate ) -> ->
+      x = arguments[0]; i = 1; while i < arguments.length
+        y = arguments[i]
+        return no unless predicate x, y
+        x = y; i++
+      yes
+
+
 
 ### General iterator classes
 
@@ -637,6 +647,7 @@ with no arguments, which signals to `next` that the iterator should yield the
       multiply
       toArray
       compare
+      comparisonOperator
       empty
       repeat
       cycle

@@ -6,6 +6,7 @@
       sum
       multiply
       compare
+      comparisonOperator
       toArray
       empty
       repeat
@@ -36,6 +37,11 @@
     decrement = (x) -> x - 1
     isEven    = (x) -> x % 2 is 0
     isOdd     = (x) -> y = x % 2; y is 1 or y is -1
+
+    increasing     = comparisonOperator ( x, y ) -> 0 > compare x, y
+    decreasing     = comparisonOperator ( x, y ) -> 0 < compare x, y
+    notIncreasing  = comparisonOperator ( x, y ) -> 0 <= compare x, y
+    notDecreasing  = comparisonOperator ( x, y ) -> 0 >= compare x, y
 
 
     complement = ( predicate ) -> -> not predicate.apply this, arguments
@@ -105,6 +111,11 @@ value -> value
         sum
         multiply
         compare
+        comparisonOperator
+        increasing
+        decreasing
+        notIncreasing
+        notDecreasing
         apply
       }
 
