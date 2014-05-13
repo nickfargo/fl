@@ -194,7 +194,7 @@ increasing( ...values )
 
 Returns `true` if arguments are provided in a strictly increasing order (`<`) as determined by `compare`; otherwise returns `false`.
 
-Equivalent to `comparisonOperator( (x,y) => compare(x,y) < 0 )`.
+Logically equivalent to `comparisonOperator( (x,y) => compare(x,y) < 0 )`.
 
 ```js
 apply( increasing, [0,1,4,9] );  // >>> true
@@ -665,7 +665,7 @@ splitWith( predicate, sequence )
 
 Returns a two-element array containing both partitions of `sequence`.
 
-```
+```js
 function isConsonant (char) {
   return /[^aeiouy]/i.test(char);
 }
