@@ -79,6 +79,11 @@
       generatorOf ( toArray sequence ).sort fn
 
 
+    sortBy = ( keyFn, fn, sequence ) ->
+      if not sequence? then sequence = fn; fn = compare
+      sort ( ( x, y ) -> fn keyFn(x), keyFn(y) ), sequence
+
+
     take = ( amount, sequence ) ->
       takeWhile ( ( v, i ) -> i < amount ), sequence
 
@@ -169,6 +174,7 @@ arg, sequence, ... -> sequence
         rest
         interpose
         sort
+        sortBy
         filter
         remove
         reductions
