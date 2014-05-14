@@ -49,9 +49,6 @@ to an iterator.
     __throw_not_sequential__ = ->
       throw new Error "Object is not sequential"
 
-    __throw_type_mismatch__ = ->
-      throw new Error "Type mismatch"
-
     __throw_not_comparable__ = ->
       throw new Error "Operands not comparable"
 
