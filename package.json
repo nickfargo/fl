@@ -1,6 +1,6 @@
 {
   "name": "fl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Functional lazy sequence operators",
   "keywords": [
     "functional",
@@ -28,8 +28,7 @@
     "build": "bin/bundle",
     "prepublish": "npm run build"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "coffee-script": "~1.7.0",
     "mocha": "*",
