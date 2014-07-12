@@ -6,8 +6,6 @@ Functional lazy operators and sequences.
 * Accepts ES6 generators as lazy sequences
 * Designed to collaborate with modules such as **[pim.js][]**, which provides persistent immutable data structures
 
-> TODO: Compare to mori.js, lazy.js, (underscore | lodash) with api adapter
-
 
 
 ## API
@@ -741,7 +739,6 @@ Sequence
   .partitionBy( function (x) { return x === 3 } )
   .map( toArray )
   .toArray();
-
 [ [ 1, 2 ], [ 3 ], [ 4, 5 ] ]
 
 
@@ -756,7 +753,6 @@ Sequence("Leeeeeerrrrooyyy")
   .partitionBy( identity )
   .map( toArray )
   .toArray();
-
 [ [ 'L' ],
   [ 'e', 'e', 'e', 'e', 'e', 'e' ],
   [ 'r', 'r', 'r', 'r' ],
@@ -768,6 +764,7 @@ Sequence("Leeeeeerrrrooyyy")
 #### interleave
 
 ```js
+Sequence.interleave( ...sequences )
 Sequence().interleave( ...sequences )
 // >>> Sequence
 
